@@ -1,9 +1,9 @@
-﻿using Dominio.Base;
+﻿namespace Dominio.Entidades;
 
-namespace FaOuHaterApi.Models;
-
-public partial class Comentario : EntidadeBase
+public partial class Comentario
 {
+    public int Id { get; set; }
+
     public string? Comentario1 { get; set; }
 
     public int IdOrigem { get; set; }
@@ -11,6 +11,10 @@ public partial class Comentario : EntidadeBase
     public int ReviewId { get; set; }
 
     public string TipoOrigem { get; set; } = null!;
+
+    public DateTime CreatedAt { get; set; }
+
+    public DateTime UpdatedAt { get; set; }
 
     public int? UsuarioId { get; set; }
 

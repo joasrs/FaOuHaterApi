@@ -1,20 +1,19 @@
-﻿using FaOuHaterApi.Interfaces.Base;
-using FaOuHaterApi.Models;
-using FaOuHaterApi.Models.Context;
-using FaOuHaterApi.Models.DTOs;
-using FaOuHaterApi.Models.DTOs.Review;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using Dominio.Dtos.Review;
+using Dominio.Interfaces;
+using Dominio.Interfaces.Base;
+using Infra.Context;
 
-namespace FaOuHaterApi.Services
+namespace Aplicacao.Services
 {
     public class ReviewService : IServiceBase<ReviewRequisicaoDto, ReviewRespostaDto>
     {
         DbFaOuHaterContext _context;
+        private readonly IUsuarioContext _usuarioContext;
 
-        public ReviewService( DbFaOuHaterContext dbFaOuHaterContext )
+        public ReviewService( DbFaOuHaterContext dbFaOuHaterContext, IUsuarioContext usuarioContext )
         {
             _context = dbFaOuHaterContext;
+            _usuarioContext = usuarioContext;
         }
 
         public IEnumerable<ReviewRespostaDto> Get()
@@ -32,9 +31,9 @@ namespace FaOuHaterApi.Services
                 };
 
                 var consulta = _context.Reviews
-                                .Include( r => r.Usuario )
-                                .Include( r => r.Reacoes )
-                                .Include( r => r.Comentarios )
+                                //.Include( r => r.Usuario )
+                                //.Include( r => r.Reacoes )
+                                //.Include( r => r.Comentarios )
                                 .Select( r => new ReviewRespostaDto
                                 {
                                     Id = r.Id,

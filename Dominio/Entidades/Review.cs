@@ -1,9 +1,9 @@
-﻿using Dominio.Base;
+﻿namespace Dominio.Entidades;
 
-namespace FaOuHaterApi.Models;
-
-public partial class Review : EntidadeBase
+public partial class Review
 {
+    public int Id { get; set; }
+
     public string Artista { get; set; } = null!;
 
     public string Musica { get; set; } = null!;
@@ -13,6 +13,10 @@ public partial class Review : EntidadeBase
     public int? Like { get; set; }
 
     public int? Dislike { get; set; }
+
+    public DateTime CreatedAt { get; set; }
+
+    public DateTime UpdatedAt { get; set; }
 
     public int? UsuarioId { get; set; }
 

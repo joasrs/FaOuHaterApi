@@ -1,12 +1,13 @@
-﻿using FaOuHaterApi.Interfaces.Base;
-using FaOuHaterApi.Models;
-using FaOuHaterApi.Models.DTOs.Review;
+﻿using Dominio.Dtos.Review;
+using Dominio.Interfaces.Base;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FaOuHaterApi.Controllers
 {
+    [Authorize]
     [ApiController]
-    [Route( "[controller]" )]
+    [Route("api/[controller]")]
     public class ReviewController : ControllerBase
     {
         IServiceBase<ReviewRequisicaoDto, ReviewRespostaDto> _reviewService;

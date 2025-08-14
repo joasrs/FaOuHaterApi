@@ -1,4 +1,4 @@
-﻿namespace FaOuHaterApi.Interfaces.Base
+﻿namespace Dominio.Interfaces.Base
 {
     public interface IServiceBase<RequisicaoDto, RespostaDto>
     {

@@ -1,4 +1,4 @@
-﻿namespace FaOuHaterApi.Models.DTOs.Review
+﻿namespace Dominio.Dtos.Review
 {
     public class ReviewRequisicaoDto
     {

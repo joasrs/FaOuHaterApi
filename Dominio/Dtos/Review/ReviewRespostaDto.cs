@@ -1,4 +1,6 @@
-﻿namespace FaOuHaterApi.Models.DTOs.Review
+﻿using Dominio.Entidades;
+
+namespace Dominio.Dtos.Review
 {
     public class ReviewRespostaDto
     {

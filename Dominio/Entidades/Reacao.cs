@@ -1,12 +1,16 @@
-﻿using Dominio.Base;
+﻿namespace Dominio.Entidades;
 
-namespace FaOuHaterApi.Models;
-
-public partial class Reacao : EntidadeBase
+public partial class Reacao
 {
+    public int Id { get; set; }
+
     public bool? Like { get; set; }
 
     public bool? Dislike { get; set; }
+
+    public DateTime CreatedAt { get; set; }
+
+    public DateTime UpdatedAt { get; set; }
 
     public int? UsuarioId { get; set; }
 
