@@ -37,12 +37,12 @@ namespace Aplicacao.Handlers.Auth.CadastrarUsuario
                 _usuarioRepositorio.Add(usuario);
                 _usuarioRepositorio.SalvarAlteracaoes();
 
-                return Task.FromResult<ActionResult<AuthResponse>>(new AuthResponse(_authService.GerarToken(usuario)));
+                return Task.FromResult<ActionResult<AuthResponse>>(new OkObjectResult(_authService.GerarToken(usuario)));
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return Task.FromResult<ActionResult<AuthResponse>>(new ObjectResult(new { Error = ex.Message }) { StatusCode = 500 });
             }
-        } 
+        }
     }
 }

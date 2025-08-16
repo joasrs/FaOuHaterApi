@@ -19,20 +19,6 @@ namespace FaOuHaterApi.Controllers
             _mediator = mediator;
         }
 
-        // GET: api/<AutenticacaoController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<AutenticacaoController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         // POST api/<AutenticacaoController>
         [HttpPost]
         public ActionResult<AuthResponse> Cadastro([FromBody] CadastrarUsuarioRequest request)
@@ -46,18 +32,6 @@ namespace FaOuHaterApi.Controllers
         public ActionResult<AuthResponse> Login([FromBody] LoginRequest request)
         {
             return _mediator.Send(request).Result;
-        }
-
-        // PUT api/<AutenticacaoController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<AutenticacaoController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

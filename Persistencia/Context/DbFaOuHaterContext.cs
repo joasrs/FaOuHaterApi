@@ -30,13 +30,13 @@ public partial class DbFaOuHaterContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Comentario1).HasColumnName("comentario");
-            entity.Property(e => e.CreatedAt).HasColumnName("createdAt");
+            entity.Property(e => e.CreatedAt).HasColumnName("createdAt").HasColumnType("timestamptz");
             entity.Property(e => e.IdOrigem).HasColumnName("idOrigem");
             entity.Property(e => e.ReviewId ).HasColumnName( "ReviewId" );
             entity.Property(e => e.TipoOrigem)
                 .HasMaxLength(255)
                 .HasColumnName("tipoOrigem");
-            entity.Property(e => e.UpdatedAt).HasColumnName("updatedAt");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updatedAt").HasColumnType("timestamptz").IsRequired(false);
 
             entity.HasOne(d => d.Usuario).WithMany(p => p.Comentarios)
                 .HasForeignKey(d => d.UsuarioId)
@@ -49,10 +49,10 @@ public partial class DbFaOuHaterContext : DbContext
             entity.HasKey(e => e.Id).HasName("Reacoes_pkey");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.CreatedAt).HasColumnName("createdAt");
+            entity.Property(e => e.CreatedAt).HasColumnName("createdAt").HasColumnType("timestamptz");
             entity.Property(e => e.Dislike).HasColumnName("dislike");
             entity.Property(e => e.Like).HasColumnName("like");
-            entity.Property(e => e.UpdatedAt).HasColumnName("updatedAt");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updatedAt").HasColumnType("timestamptz").IsRequired(false);
 
             entity.HasOne(d => d.Review).WithMany(p => p.Reacoes)
                 .HasForeignKey(d => d.ReviewId)
@@ -73,14 +73,14 @@ public partial class DbFaOuHaterContext : DbContext
             entity.Property(e => e.Artista)
                 .HasMaxLength(255)
                 .HasColumnName("artista");
-            entity.Property(e => e.CreatedAt).HasColumnName("createdAt");
+            entity.Property(e => e.CreatedAt).HasColumnName("createdAt").HasColumnType("timestamptz");
             entity.Property(e => e.Dislike).HasColumnName("dislike");
             entity.Property(e => e.Like).HasColumnName("like");
             entity.Property(e => e.Musica)
                 .HasMaxLength(255)
                 .HasColumnName("musica");
             entity.Property(e => e.Review1).HasColumnName("review");
-            entity.Property(e => e.UpdatedAt).HasColumnName("updatedAt");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updatedAt").HasColumnType("timestamptz").IsRequired(false);
 
             entity.HasOne(d => d.Usuario).WithMany(p => p.Reviews)
                 .HasForeignKey(d => d.UsuarioId)
@@ -98,7 +98,7 @@ public partial class DbFaOuHaterContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Admin).HasColumnName("admin");
-            entity.Property(e => e.CreatedAt).HasColumnName("createdAt");
+            entity.Property(e => e.CreatedAt).HasColumnName("createdAt").HasColumnType("timestamptz");
             entity.Property(e => e.Email)
                 .HasMaxLength(255)
                 .HasColumnName("email");
@@ -111,7 +111,7 @@ public partial class DbFaOuHaterContext : DbContext
             entity.Property(e => e.Senha)
                 .HasMaxLength(255)
                 .HasColumnName("senha");
-            entity.Property(e => e.UpdatedAt).HasColumnName("updatedAt");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updatedAt").HasColumnType("timestamptz").IsRequired(false);
             entity.Property(e => e.UrlImagemPerfil)
                 .HasColumnType("character varying")
                 .HasColumnName("urlImagemPerfil");

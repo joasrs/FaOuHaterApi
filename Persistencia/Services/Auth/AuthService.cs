@@ -6,7 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Aplicacao.Services.Auth
+namespace Infra.Services.Auth
 {
     public class AuthService : IAuthService
     {

@@ -1,5 +1,8 @@
-﻿using Dominio.Dtos.Review;
-using Dominio.Interfaces.Base;
+﻿using Aplicacao.Handlers.Review.AdicionarReview;
+using Aplicacao.Handlers.Review.DeletarReview;
+using Aplicacao.Handlers.Review.ObterReviews;
+using Dominio.Dtos.Review;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,17 +13,29 @@ namespace FaOuHaterApi.Controllers
     [Route("api/[controller]")]
     public class ReviewController : ControllerBase
     {
-        IServiceBase<ReviewRequisicaoDto, ReviewRespostaDto> _reviewService;
+        private readonly IMediator _mediator;
 
-        public ReviewController( IServiceBase<ReviewRequisicaoDto, ReviewRespostaDto> reviewService )
+        public ReviewController(IMediator mediator)
         {
-            _reviewService = reviewService;
+            _mediator = mediator;
         }
 
-        [HttpGet( Name = "GetReviews" )]
-        public IEnumerable<ReviewRespostaDto> Get()
+        [HttpGet]
+        public ActionResult<IEnumerable<ReviewRespostaDto>> ObterReviews()
         {
-            return _reviewService.Get();
+            return _mediator.Send(new ObterReviewsRequest()).Result;
+        }
+
+        [HttpPost]
+        public IActionResult ObterReviews([FromBody] AdicionarReviewRequest command)
+        {
+            return _mediator.Send(command).Result;
+        }
+
+        [HttpDelete("{idReview}")]
+        public IActionResult DeletarReview([FromRoute] int idReview)
+        {
+            return _mediator.Send(new DeletarReviewRequest { IdReview = idReview }).Result;
         }
     }
 }

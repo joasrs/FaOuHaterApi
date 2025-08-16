@@ -1,12 +1,6 @@
 using Aplicacao.Handlers.Auth.CadastrarUsuario;
-using Aplicacao.Services;
-using Aplicacao.Services.Auth;
-using Domain.Interfaces;
-using Dominio.Dtos.Review;
-using Dominio.Interfaces;
-using Dominio.Interfaces.Base;
+using Infra.Config;
 using Infra.Context;
-using Infra.Repositorios;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -35,13 +29,7 @@ builder.Services.AddCors( options =>
     } );
 } );
 
-builder.Services.AddScoped<IServiceBase<ReviewRequisicaoDto, ReviewRespostaDto>, ReviewService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddScoped<IUsuarioContext, UsuarioContext>();
-
-var key = Encoding.ASCII.GetBytes( "1wish-you-were-here2" );
+builder.Services.AddInjecaoDependecia();
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -77,7 +65,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors( "OrigensPermitidas" );
+app.UseCors("OrigensPermitidas");
 
 app.UseHttpsRedirection();
 
