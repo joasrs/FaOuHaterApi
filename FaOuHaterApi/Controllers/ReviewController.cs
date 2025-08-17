@@ -1,7 +1,9 @@
-﻿using Aplicacao.Handlers.Review.AdicionarReview;
+﻿using Aplicacao.Handlers.Reacao.AdicionarAlterarReacao;
+using Aplicacao.Handlers.Review.AdicionarReview;
 using Aplicacao.Handlers.Review.DeletarReview;
 using Aplicacao.Handlers.Review.ObterReviews;
 using Dominio.Dtos.Review;
+using Dominio.Enum;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +38,12 @@ namespace FaOuHaterApi.Controllers
         public IActionResult DeletarReview([FromRoute] int idReview)
         {
             return _mediator.Send(new DeletarReviewRequest { IdReview = idReview }).Result;
+        }
+
+        [HttpPut("{idReview}/reagir/{tipoReacao}")]
+        public IActionResult Put([FromRoute]int idReview, [FromRoute] EnumTipoReacao tipoReacao)
+        {
+            return _mediator.Send(new AdicionarAlterarReacaoRequest { IdReview = idReview , TipoReacao = tipoReacao }).Result;
         }
     }
 }

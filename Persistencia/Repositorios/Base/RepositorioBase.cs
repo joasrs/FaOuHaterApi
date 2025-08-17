@@ -47,5 +47,10 @@ namespace Infra.Repositorios.Base
             entity.UpdatedAt = DateTime.UtcNow;
             return DbSet.Update(entity) != null;
         }
+
+        public bool Existe(int id)
+        {
+            return DbSet.Any(e => e.Id == id);
+        }
     }
 }

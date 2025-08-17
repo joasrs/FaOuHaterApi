@@ -52,6 +52,7 @@ public partial class DbFaOuHaterContext : DbContext
             entity.Property(e => e.CreatedAt).HasColumnName("createdAt").HasColumnType("timestamptz");
             entity.Property(e => e.Dislike).HasColumnName("dislike");
             entity.Property(e => e.Like).HasColumnName("like");
+            entity.Property(e => e.TipoReacao).HasColumnName("tipoReacao").HasColumnType("smallint");
             entity.Property(e => e.UpdatedAt).HasColumnName("updatedAt").HasColumnType("timestamptz").IsRequired(false);
 
             entity.HasOne(d => d.Review).WithMany(p => p.Reacoes)

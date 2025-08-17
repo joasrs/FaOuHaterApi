@@ -1,4 +1,5 @@
 ﻿using Dominio.Entidades.Base;
+using Dominio.Enum;
 
 namespace Dominio.Entidades;
 
@@ -10,4 +11,5 @@ public partial class Reacao : EntidadeBase
     public virtual Review? Review { get; set; }
     public int? UsuarioId { get; set; }
     public virtual Usuario? Usuario { get; set; }
+    public EnumTipoReacao TipoReacao { get; set; }
 }

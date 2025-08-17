@@ -8,5 +8,6 @@
         bool Update(TEntidade entity);
         bool Delete(TEntidade entity);
         bool SalvarAlteracaoes();
+        bool Existe(int id);
     }
 }

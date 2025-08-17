@@ -12,11 +12,12 @@ namespace Infra.Config
     {
         public static void AddInjecaoDependecia(this IServiceCollection services)
         {
-            services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
-            services.AddScoped<IReviewRepositorio, ReviewRepositorio>();
             services.AddScoped<IComentarioRepositorio, ComentarioRepositorio>();
+            services.AddScoped<IReacaoRepositorio, ReacaoRepositorio>();
+            services.AddScoped<IReviewRepositorio, ReviewRepositorio>();
+            services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 
-            services.AddScoped<IAuthService, AuthService>();
+            services.AddSingleton<IAuthService, AuthService>();
             services.AddScoped<IUsuarioContext, UsuarioContext>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
