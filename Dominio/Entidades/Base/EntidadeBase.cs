@@ -1,11 +1,8 @@
-﻿using Dominio.Entidades;
+﻿namespace Dominio.Entidades.Base;
 
-namespace Dominio.Entidades.Base
+public abstract class EntidadeBase
 {
-    public abstract class EntidadeBase
-    {
-        public int Id { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime? UpdatedAt { get; set; }
-    }
+    public int Id { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 }

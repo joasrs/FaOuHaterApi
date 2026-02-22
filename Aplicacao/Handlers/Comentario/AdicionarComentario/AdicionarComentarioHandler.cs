@@ -36,12 +36,12 @@ namespace Aplicacao.Handlers.Comentario.AdicionarComentario
                     IdOrigem = review.Id,
                     ReviewId = review.Id,
                     TipoOrigem = "Review",
-                    UsuarioId = _usuarioContext.Usuario.Id
+                    UsuarioId = _usuarioContext.Usuario!.Id
                 });
 
                 _comentarioRepositorio.SalvarAlteracaoes();
 
-                return Task.FromResult(HttpResult.Ok());
+                return Task.FromResult(HttpResult.Created());
             }
             catch (Exception ex)
             {

@@ -1,25 +1,9 @@
-﻿using Dominio.Enum;
-using Dominio.Interfaces.Base;
+﻿using Dominio.Interfaces.Base;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FaOuHaterApi.Controllers.Core
+namespace FaOuHaterApi.Controllers.Core;
+
+public abstract class RestController : ControllerBase
 {
-    public abstract class RestController : ControllerBase
-    {
-        protected IActionResult ActionResult(IHttpResult httpResult)
-        {
-            var statusCode = httpResult.GetStatusCode();
-            return statusCode switch
-            {
-                EnumHttpStatusCode.Created or
-                EnumHttpStatusCode.InternalServerError => StatusCode((int)statusCode),
-                EnumHttpStatusCode.Ok or
-                EnumHttpStatusCode.NotFound or
-                EnumHttpStatusCode.BadRequest or
-                EnumHttpStatusCode.InvalidInput => StatusCode((int)statusCode, httpResult),
-                EnumHttpStatusCode.Unauthorized => new UnauthorizedObjectResult(httpResult),
-                _ => StatusCode(StatusCodes.Status500InternalServerError, "Código de status desconhecido"),
-            };
-        }
-    }
+    protected IActionResult ActionResult(IHttpResult httpResult) => StatusCode(httpResult.GetStatusCode(), httpResult);
 }

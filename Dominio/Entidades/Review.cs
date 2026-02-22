@@ -12,5 +12,5 @@ public partial class Review : EntidadeBase
     public int UsuarioId { get; set; }
     public virtual Usuario Usuario { get; set; } = null!;
     public virtual ICollection<Reacao> Reacoes { get; set; } = new List<Reacao>();
-    public ICollection<Comentario> Comentarios { get; set; } = new List<Comentario>();
+    public virtual ICollection<Comentario> Comentarios { get; set; } = new List<Comentario>();
 }
