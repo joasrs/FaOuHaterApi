@@ -1,11 +1,12 @@
 ﻿using Domain.Interfaces;
 using Dominio.Entidades;
+using Dominio.Interfaces.Base;
+using Infra.Http;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Aplicacao.Handlers.Auth.CadastrarUsuario
 {
-    public class CadastrarUsuarioHandler : IRequestHandler<CadastrarUsuarioRequest, ActionResult<AuthResponse>>
+    public class CadastrarUsuarioHandler : IRequestHandler<CadastrarUsuarioRequest, IHttpDataResult<AuthResponse>>
     {
         private readonly IAuthService _authService;
         private readonly IUsuarioRepositorio _usuarioRepositorio;
@@ -16,15 +17,15 @@ namespace Aplicacao.Handlers.Auth.CadastrarUsuario
             _usuarioRepositorio = usuarioRepositorio;
         }
 
-        public Task<ActionResult<AuthResponse>> Handle(CadastrarUsuarioRequest request, CancellationToken cancellationToken)
+        public Task<IHttpDataResult<AuthResponse>> Handle(CadastrarUsuarioRequest request, CancellationToken cancellationToken)
         {
             try
             {
                 if (string.IsNullOrEmpty(request.Nome) || string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Login) || string.IsNullOrEmpty(request.Senha))
-                    return Task.FromResult<ActionResult<AuthResponse>>(new BadRequestObjectResult("Todos os campos são obrigatórios."));
+                    return Task.FromResult(HttpDataResult<AuthResponse>.InvalidInput("Todos os campos são obrigatórios."));
 
                 if (_usuarioRepositorio.VerificarUsuarioExiste(request.Login, request.Email))
-                    return Task.FromResult<ActionResult<AuthResponse>>(new BadRequestObjectResult("Usuário ou e-mail já cadastrado."));
+                    return Task.FromResult(HttpDataResult<AuthResponse>.BadRequest("Usuário ou e-mail já cadastrado."));
 
                 var usuario = new Usuario
                 {
@@ -37,12 +38,12 @@ namespace Aplicacao.Handlers.Auth.CadastrarUsuario
                 _usuarioRepositorio.Add(usuario);
                 _usuarioRepositorio.SalvarAlteracaoes();
 
-                return Task.FromResult<ActionResult<AuthResponse>>(new AuthResponse(_authService.GerarToken(usuario)));
+                return Task.FromResult(HttpDataResult<AuthResponse>.Ok(new AuthResponse(_authService.GerarToken(usuario))));
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return Task.FromResult(HttpDataResult<AuthResponse>.InternalServerError(ex));
             }
-        } 
+        }
     }
 }

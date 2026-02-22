@@ -1,10 +1,11 @@
 ﻿using Domain.Interfaces.Base;
+using Dominio.Entidades.Base;
 using Infra.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infra.Repositorios.Base
 {
-    public class RepositorioBase<TEntidade> : IRepositorioBase<TEntidade> where TEntidade : class
+    public class RepositorioBase<TEntidade> : IRepositorioBase<TEntidade> where TEntidade : EntidadeBase
     {
         private readonly DbFaOuHaterContext _context;
         public readonly DbSet<TEntidade> DbSet;
@@ -17,15 +18,16 @@ namespace Infra.Repositorios.Base
 
         public bool Add(TEntidade entity)
         {
+            entity.CreatedAt = DateTime.UtcNow;
             return DbSet.Add(entity) != null;
         }
 
-        public bool Delete(int id)
+        public bool Delete(TEntidade entity)
         {
-            return DbSet.Remove(Obter(id)) != null;
+            return DbSet.Remove(entity) != null;
         }
 
-        public TEntidade Obter(int id)
+        public TEntidade? Obter(int id)
         {
             return DbSet.Find(id);
         }
@@ -42,7 +44,13 @@ namespace Infra.Repositorios.Base
 
         public bool Update(TEntidade entity)
         {
+            entity.UpdatedAt = DateTime.UtcNow;
             return DbSet.Update(entity) != null;
+        }
+
+        public bool Existe(int id)
+        {
+            return DbSet.Any(e => e.Id == id);
         }
     }
 }

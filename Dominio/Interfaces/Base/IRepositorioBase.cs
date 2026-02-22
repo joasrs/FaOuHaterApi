@@ -6,7 +6,8 @@
         IEnumerable<TEntidade> ObterTodos();
         bool Add(TEntidade entity);
         bool Update(TEntidade entity);
-        bool Delete(int id);
+        bool Delete(TEntidade entity);
         bool SalvarAlteracaoes();
+        bool Existe(int id);
     }
 }

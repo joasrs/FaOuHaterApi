@@ -1,7 +1,8 @@
-﻿using Dominio.Entidades;
-using Domain.Interfaces;
-using Infra.Repositorios.Base;
+﻿using Domain.Interfaces;
+using Dominio.Entidades;
+using Dominio.Interfaces;
 using Infra.Context;
+using Infra.Repositorios.Base;
 
 namespace Infra.Repositorios
 {
