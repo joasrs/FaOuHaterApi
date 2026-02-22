@@ -2,8 +2,8 @@
 using Aplicacao.Handlers.Review.AdicionarReview;
 using Aplicacao.Handlers.Review.DeletarReview;
 using Aplicacao.Handlers.Review.ObterReviews;
-using Dominio.Dtos.Review;
 using Dominio.Enum;
+using FaOuHaterApi.Controllers.Core;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +13,7 @@ namespace FaOuHaterApi.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class ReviewController : ControllerBase
+    public class ReviewController : RestController
     {
         private readonly IMediator _mediator;
 
@@ -23,27 +23,27 @@ namespace FaOuHaterApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<ReviewRespostaDto>> ObterReviews()
+        public async Task<IActionResult> ObterReviews()
         {
-            return _mediator.Send(new ObterReviewsRequest()).Result;
+            return ActionResult(await _mediator.Send(new ObterReviewsRequest()));
         }
 
         [HttpPost]
-        public IActionResult ObterReviews([FromBody] AdicionarReviewRequest command)
+        public async Task<IActionResult> AdicionarReview([FromBody] AdicionarReviewRequest request)
         {
-            return _mediator.Send(command).Result;
+            return ActionResult(await _mediator.Send(request));
         }
 
         [HttpDelete("{idReview}")]
-        public IActionResult DeletarReview([FromRoute] int idReview)
+        public async Task<IActionResult> DeletarReview([FromRoute] DeletarReviewRequest request)
         {
-            return _mediator.Send(new DeletarReviewRequest { IdReview = idReview }).Result;
+            return ActionResult(await _mediator.Send(request));
         }
 
         [HttpPut("{idReview}/reagir/{tipoReacao}")]
-        public IActionResult Put([FromRoute]int idReview, [FromRoute] EnumTipoReacao tipoReacao)
+        public async Task<IActionResult> Put([FromRoute] AdicionarAlterarReacaoRequest request)
         {
-            return _mediator.Send(new AdicionarAlterarReacaoRequest { IdReview = idReview , TipoReacao = tipoReacao }).Result;
+            return ActionResult(await _mediator.Send(request));
         }
     }
 }

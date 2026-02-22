@@ -1,10 +1,12 @@
 ﻿using Domain.Interfaces;
+using Dominio.Enum;
+using Dominio.Interfaces.Base;
+using Infra.Http;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Aplicacao.Handlers.Auth.Login
 {
-    public class LoginHandler : IRequestHandler<LoginRequest, ActionResult<AuthResponse>>
+    public class LoginHandler : IRequestHandler<LoginRequest, IHttpDataResult<AuthResponse>>
     {
         private readonly IAuthService _authService;
         private readonly IUsuarioRepositorio _usuarioRepositorio;
@@ -15,19 +17,19 @@ namespace Aplicacao.Handlers.Auth.Login
             _usuarioRepositorio = usuarioRepositorio;
         }
 
-        public Task<ActionResult<AuthResponse>> Handle(LoginRequest request, CancellationToken cancellationToken)
+        public Task<IHttpDataResult<AuthResponse>> Handle(LoginRequest request, CancellationToken cancellationToken)
         {
             try
             {
                 if (string.IsNullOrEmpty(request.Login) || string.IsNullOrEmpty(request.Senha))
-                    return Task.FromResult<ActionResult<AuthResponse>>(new BadRequestObjectResult("Campos de login e senha são obrigatórios."));
+                    return Task.FromResult(HttpDataResult<AuthResponse>.InvalidInput("Campos de login e senha são obrigatórios."));
 
                 var usuario = _usuarioRepositorio.ObterPorLogin(request.Login);
 
                 if (usuario == null || !_authService.ValidarSenha(request.Senha, usuario.Senha))
-                    return Task.FromResult<ActionResult<AuthResponse>>(new UnauthorizedResult());
+                    return Task.FromResult(HttpDataResult<AuthResponse>.CreateStatusCode(EnumHttpStatusCode.Unauthorized));
 
-                return Task.FromResult<ActionResult<AuthResponse>>(new AuthResponse(_authService.GerarToken(usuario)));
+                return Task.FromResult(HttpDataResult<AuthResponse>.Ok(new AuthResponse(_authService.GerarToken(usuario))));
             }
             catch (Exception ex)
             {

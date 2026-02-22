@@ -1,10 +1,10 @@
 ﻿using Dominio.Enum;
+using Dominio.Interfaces.Base;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Aplicacao.Handlers.Reacao.AdicionarAlterarReacao
 {
-    public class AdicionarAlterarReacaoRequest : IRequest<IActionResult>
+    public class AdicionarAlterarReacaoRequest : IRequest<IHttpResult>
     {
         public int IdReview { get; set; }
         public EnumTipoReacao TipoReacao { get; set; } = EnumTipoReacao.Indefinido;

@@ -1,10 +1,11 @@
 ﻿using Dominio.Interfaces;
+using Dominio.Interfaces.Base;
+using Infra.Http;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Aplicacao.Handlers.Comentario.ObterComentarios
 {
-    public class ObterComentariosHandler : IRequestHandler<ObterComentariosRequest, ActionResult<IEnumerable<ObterComentariosResponse>>>
+    public class ObterComentariosHandler : IRequestHandler<ObterComentariosRequest, IHttpDataResult<IEnumerable<ObterComentariosResponse>>>
     {
         private readonly IComentarioRepositorio _comentarioRepositorio;
 
@@ -13,19 +14,27 @@ namespace Aplicacao.Handlers.Comentario.ObterComentarios
             _comentarioRepositorio = comentarioRepositorio;
         }
 
-        public Task<ActionResult<IEnumerable<ObterComentariosResponse>>> Handle(ObterComentariosRequest request, CancellationToken cancellationToken)
+        public Task<IHttpDataResult<IEnumerable<ObterComentariosResponse>>> Handle(ObterComentariosRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                var response = request.IdReview > 0 ? 
+                var comentarios = request.IdReview > 0 ? 
                                 _comentarioRepositorio.ObterComentariosPorReview(request.IdReview) :
                                 _comentarioRepositorio.ObterTodos();
 
-                return Task.FromResult<ActionResult<IEnumerable<ObterComentariosResponse>>>(new OkObjectResult(response));
+                if ((comentarios?.Count() ?? 0) == 0)
+                    return Task.FromResult(HttpDataResult<IEnumerable<ObterComentariosResponse>>.NotFound("Nenhum comentário encontrado."));
+
+                var response = comentarios!.Select(c => new ObterComentariosResponse
+                {
+                    Comentario = c.Comentario1 ?? string.Empty
+                });
+
+                return Task.FromResult(HttpDataResult<IEnumerable<ObterComentariosResponse>>.Ok(response));
             }
             catch (Exception ex)
             {
-                return Task.FromResult<ActionResult<IEnumerable<ObterComentariosResponse>>>(new ObjectResult(new { Error = ex.Message }) { StatusCode = 500 });
+                return Task.FromResult(HttpDataResult<IEnumerable<ObterComentariosResponse>>.InternalServerError(ex));
             }
         }
     }

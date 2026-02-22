@@ -1,11 +1,12 @@
 ﻿using Dominio.Dtos.Review;
 using Dominio.Interfaces;
+using Dominio.Interfaces.Base;
+using Infra.Http;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Aplicacao.Handlers.Review.ObterReviews
 {
-    public class ObterReviewsHandler : IRequestHandler<ObterReviewsRequest, ActionResult<IEnumerable<ReviewRespostaDto>>>
+    public class ObterReviewsHandler : IRequestHandler<ObterReviewsRequest, IHttpDataResult<IEnumerable<ReviewRespostaDto>>>
     {
         private readonly IUsuarioContext _usuarioContext;
         private readonly IReviewRepositorio _reviewRepositorio;
@@ -16,17 +17,16 @@ namespace Aplicacao.Handlers.Review.ObterReviews
             _reviewRepositorio = reviewRepositorio;
         }
 
-        public Task<ActionResult<IEnumerable<ReviewRespostaDto>>> Handle(ObterReviewsRequest request, CancellationToken cancellationToken)
+        public Task<IHttpDataResult<IEnumerable<ReviewRespostaDto>>> Handle(ObterReviewsRequest request, CancellationToken cancellationToken)
         {
             try
             {
                 var response = _reviewRepositorio.ObterReviews(_usuarioContext.Usuario.Id);
-
-                return Task.FromResult<ActionResult<IEnumerable<ReviewRespostaDto>>>(new OkObjectResult(response));
+                return Task.FromResult(HttpDataResult<IEnumerable<ReviewRespostaDto>>.Ok(response));
             }
             catch (Exception ex)
             {
-                return Task.FromResult<ActionResult<IEnumerable<ReviewRespostaDto>>>(new ObjectResult(new { Error = ex.Message }) { StatusCode = 500 });
+                return Task.FromResult(HttpDataResult<IEnumerable<ReviewRespostaDto>>.InternalServerError(ex));
             }
         }
     }

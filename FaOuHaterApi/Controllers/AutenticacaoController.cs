@@ -1,16 +1,14 @@
 ﻿using Aplicacao.Handlers.Auth;
-using Aplicacao.Handlers.Auth.CadastrarUsuario;
 using Aplicacao.Handlers.Auth.Login;
+using FaOuHaterApi.Controllers.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace FaOuHaterApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AutenticacaoController : ControllerBase
+    public class AutenticacaoController : RestController
     {
         private readonly IMediator _mediator;
 
@@ -21,17 +19,17 @@ namespace FaOuHaterApi.Controllers
 
         // POST api/<AutenticacaoController>
         [HttpPost]
-        public ActionResult<AuthResponse> Cadastro([FromBody] CadastrarUsuarioRequest request)
+        public async Task<IActionResult> Cadastro([FromBody] CadastrarUsuarioRequest request)
         {
-            return _mediator.Send(request).Result;
+            return ActionResult(await _mediator.Send(request));
         }
 
         // POST api/<AutenticacaoController>
         [HttpPost]
         [Route("login")]
-        public ActionResult<AuthResponse> Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            return _mediator.Send(request).Result;
+            return ActionResult(await _mediator.Send(request));
         }
     }
 }

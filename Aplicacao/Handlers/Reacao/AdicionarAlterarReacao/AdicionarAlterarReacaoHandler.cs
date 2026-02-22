@@ -1,10 +1,11 @@
 ﻿using Dominio.Interfaces;
+using Dominio.Interfaces.Base;
+using Infra.Http;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Aplicacao.Handlers.Reacao.AdicionarAlterarReacao
 {
-    public class AdicionarAlterarReacaoHandler : IRequestHandler<AdicionarAlterarReacaoRequest, IActionResult>
+    public class AdicionarAlterarReacaoHandler : IRequestHandler<AdicionarAlterarReacaoRequest, IHttpResult>
     {
         private readonly IUsuarioContext _usuarioContext;
         private readonly IReacaoRepositorio _reacaoRepositorio;
@@ -17,17 +18,17 @@ namespace Aplicacao.Handlers.Reacao.AdicionarAlterarReacao
             _reviewRepositorio = reviewRepositorio;
         }
 
-        public Task<IActionResult> Handle(AdicionarAlterarReacaoRequest request, CancellationToken cancellationToken)
+        public Task<IHttpResult> Handle(AdicionarAlterarReacaoRequest request, CancellationToken cancellationToken)
         {
             try
             {
                 if (request.IdReview <= 0)
-                    return Task.FromResult<IActionResult>(new BadRequestObjectResult("Necessário informar o Id da review."));
+                    return Task.FromResult<IHttpResult>(HttpResult.InvalidInput("Necessário informar o Id da review."));
 
                 if(!_reviewRepositorio.Existe(request.IdReview))
-                    return Task.FromResult<IActionResult>(new BadRequestObjectResult("Não foi encontrado nenhuma review com o id especificado."));
+                    return Task.FromResult<IHttpResult>(HttpResult.NotFound("Não foi encontrado nenhuma review com o id especificado."));
 
-                Dominio.Entidades.Reacao? reacao = _reacaoRepositorio.ObterReacaoPorUsuarioReview(_usuarioContext.Usuario.Id, request.IdReview);
+                var reacao = _reacaoRepositorio.ObterReacaoPorUsuarioReview(_usuarioContext.Usuario.Id, request.IdReview);
 
                 if(reacao != null)
                 {
@@ -48,11 +49,11 @@ namespace Aplicacao.Handlers.Reacao.AdicionarAlterarReacao
 
                 _reacaoRepositorio.SalvarAlteracaoes();
 
-                return Task.FromResult<IActionResult>(new OkResult());
+                return Task.FromResult<IHttpResult>(HttpResult.Ok());
             }
             catch (Exception ex)
             {
-                return Task.FromResult<IActionResult>(new ObjectResult(new { Error = ex.Message }) { StatusCode = 500 });
+                return Task.FromResult<IHttpResult>(HttpResult.InternalServerError(ex));
             }
         }
     }

@@ -1,10 +1,10 @@
 ﻿using Dominio.Dtos.Review;
+using Dominio.Interfaces.Base;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Aplicacao.Handlers.Review.ObterReviews
 {
-    public class ObterReviewsRequest : IRequest<ActionResult<IEnumerable<ReviewRespostaDto>>>
+    public class ObterReviewsRequest : IRequest<IHttpDataResult<IEnumerable<ReviewRespostaDto>>>
     {
     }
 }

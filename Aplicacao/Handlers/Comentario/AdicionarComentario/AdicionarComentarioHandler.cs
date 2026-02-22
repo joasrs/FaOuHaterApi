@@ -1,13 +1,11 @@
-﻿using Dominio.Entidades;
-using Dominio.Interfaces;
-using Infra.Context;
-using Infra.Repositorios;
+﻿using Dominio.Interfaces;
+using Dominio.Interfaces.Base;
+using Infra.Http;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Aplicacao.Handlers.Comentario.AdicionarComentario
 {
-    public class AdicionarComentarioHandler : IRequestHandler<AdicionarComentarioRequest, IActionResult>
+    public class AdicionarComentarioHandler : IRequestHandler<AdicionarComentarioRequest, IHttpResult>
     {
         private readonly IUsuarioContext _usuarioContext;
         private readonly IReviewRepositorio _reviewRepositorio;
@@ -20,17 +18,17 @@ namespace Aplicacao.Handlers.Comentario.AdicionarComentario
             _comentarioRepositorio = comentarioRepositorio;
         }
 
-        public Task<IActionResult> Handle(AdicionarComentarioRequest request, CancellationToken cancellationToken)
+        public Task<IHttpResult> Handle(AdicionarComentarioRequest request, CancellationToken cancellationToken)
         {
             try
             {
                 if(string.IsNullOrWhiteSpace(request.Comentario))
-                    return Task.FromResult<IActionResult>(new BadRequestObjectResult("Comentário não pode ser vazio."));
+                    return Task.FromResult(HttpResult.InvalidInput("Comentário não pode ser vazio."));
 
                 var review = _reviewRepositorio.Obter(request.IdReview);
 
                 if(review == null)
-                    return Task.FromResult<IActionResult>(new NotFoundObjectResult("Review não encontrada."));
+                    return Task.FromResult(HttpResult.NotFound("Review não encontrada."));
 
                 _comentarioRepositorio.Add(new Dominio.Entidades.Comentario
                 {
@@ -43,11 +41,11 @@ namespace Aplicacao.Handlers.Comentario.AdicionarComentario
 
                 _comentarioRepositorio.SalvarAlteracaoes();
 
-                return Task.FromResult<IActionResult>(new OkResult());
+                return Task.FromResult(HttpResult.Ok());
             }
             catch (Exception ex)
             {
-                return Task.FromResult<IActionResult>(new ObjectResult(new { Error = ex.Message }) { StatusCode = 500 });
+                return Task.FromResult(HttpResult.InternalServerError(ex));
             }
         }
     }

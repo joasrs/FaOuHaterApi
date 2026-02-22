@@ -1,11 +1,12 @@
 ﻿using Aplicacao.Validators.Review;
 using Dominio.Interfaces;
+using Dominio.Interfaces.Base;
+using Infra.Http;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Aplicacao.Handlers.Review.AdicionarReview
 {
-    public class AdicionarReviewHandler : IRequestHandler<AdicionarReviewRequest, IActionResult>
+    public class AdicionarReviewHandler : IRequestHandler<AdicionarReviewRequest, IHttpResult>
     {
         public readonly IUsuarioContext _usuarioContext;
         public readonly IReviewRepositorio _reviewRepositorio;
@@ -16,7 +17,7 @@ namespace Aplicacao.Handlers.Review.AdicionarReview
             _reviewRepositorio = reviewRepositorio;
         }
 
-        public Task<IActionResult> Handle(AdicionarReviewRequest request, CancellationToken cancellationToken)
+        public Task<IHttpResult> Handle(AdicionarReviewRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -31,16 +32,16 @@ namespace Aplicacao.Handlers.Review.AdicionarReview
                 var resultadoValidacao = new AdicionarReviewValidator().Validate(review);
 
                 if (!resultadoValidacao.IsValid)
-                    return Task.FromResult<IActionResult>(new BadRequestObjectResult(resultadoValidacao.Errors.Select(e => e.ErrorMessage)));
+                    return Task.FromResult(HttpResult.InvalidInput(resultadoValidacao.Errors.Select(e => e.ErrorMessage)));
 
                 _reviewRepositorio.Add(review);
                 _reviewRepositorio.SalvarAlteracaoes();
 
-                return Task.FromResult<IActionResult>(new OkResult());
+                return Task.FromResult(HttpResult.Created());
             }
             catch (Exception ex)
             {
-                return Task.FromResult<IActionResult>(new ObjectResult(new { Error = ex.Message }) { StatusCode = 500 });
+                return Task.FromResult(HttpResult.InternalServerError(ex));
             }
         }
     }

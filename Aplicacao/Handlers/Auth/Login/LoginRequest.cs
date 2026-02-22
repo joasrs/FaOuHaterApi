@@ -1,9 +1,9 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
+﻿using Dominio.Interfaces.Base;
+using MediatR;
 
 namespace Aplicacao.Handlers.Auth.Login
 {
-    public class LoginRequest : IRequest<ActionResult<AuthResponse>>
+    public class LoginRequest : IRequest<IHttpDataResult<AuthResponse>>
     {
         public string Login { get; set; } = null!;
 

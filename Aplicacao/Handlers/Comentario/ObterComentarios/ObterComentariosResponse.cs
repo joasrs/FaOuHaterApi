@@ -8,5 +8,6 @@ namespace Aplicacao.Handlers.Comentario.ObterComentarios
 {
     public class ObterComentariosResponse
     {
+        public string Comentario { get; set; } = string.Empty;
     }
 }
