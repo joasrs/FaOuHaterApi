@@ -4,46 +4,53 @@ using Dominio.Interfaces;
 using Infra.Context;
 using Infra.Repositorios.Base;
 
-namespace Infra.Repositorios
+namespace Infra.Repositorios;
+
+public class ReviewRepositorio : RepositorioBase<Review>, IReviewRepositorio
 {
-    public class ReviewRepositorio : RepositorioBase<Review>, IReviewRepositorio
+    public ReviewRepositorio(DbFaOuHaterContext context) : base(context)
     {
-        public ReviewRepositorio(DbFaOuHaterContext context) : base(context)
-        {
-        }
+    }
 
-        public IEnumerable<ReviewRespostaDto> ObterReviews(int idUsuario)
-        {
-            return DbSet
-                        //.Include( r => r.Usuario )
-                        //.Include( r => r.Reacoes )
-                        //.Include( r => r.Comentarios )
-                        .Select(r => new ReviewRespostaDto
-                        {
-                            Id = r.Id,
-                            Artista = r.Artista,
-                            Musica = r.Musica,
-                            Review1 = r.Review1,
-                            Like = r.Like,
-                            Dislike = r.Dislike,
-                            CreatedAt = r.CreatedAt,
-                            Usuario = r.Usuario,
+    public IEnumerable<ReviewRespostaDto> ObterReviews(ObterReviewsFiltroDto filtro)
+    {
+        var query = DbSet
+            .Select(r => new ReviewRespostaDto
+            {
+                Id = r.Id,
+                Artista = r.Artista,
+                Musica = r.Musica,
+                Review1 = r.Review1,
+                Like = r.Like,
+                Dislike = r.Dislike,
+                CreatedAt = r.CreatedAt,
 
-                            UsuarioLike = r.Reacoes
-                                .Where(reacao => reacao.UsuarioId == idUsuario)
-                                .Select(reacao => reacao.Like)
-                                .FirstOrDefault(),
+                Usuario = new ReviewRespostaUsuarioDto
+                {
+                    Id = r.Usuario.Id,
+                    Nome = r.Usuario.Nome,
+                    Login = r.Usuario.Login,
+                    UrlImagemPerfil = r.Usuario.UrlImagemPerfil ?? string.Empty
+                },
 
-                            UsuarioDislike = r.Reacoes
-                                .Where(reacao => reacao.UsuarioId == idUsuario)
-                                .Select(reacao => reacao.Dislike)
-                                .FirstOrDefault(),
+                UsuarioLike = r.Reacoes
+                    .Where(reacao => reacao.UsuarioId == filtro.IdUsuarioAutenticado)
+                    .Select(reacao => reacao.Like)
+                    .FirstOrDefault(),
 
-                            QtdLikes = r.Reacoes.Count(reacao => reacao.Like == true),
-                            QtdDislikes = r.Reacoes.Count(reacao => reacao.Dislike == true),
-                            QtdComentarios = r.Comentarios.Count
-                        })
-                        .OrderByDescending(r => r.CreatedAt);
-        }
+                UsuarioDislike = r.Reacoes
+                    .Where(reacao => reacao.UsuarioId == filtro.IdUsuarioAutenticado)
+                    .Select(reacao => reacao.Dislike)
+                    .FirstOrDefault(),
+
+                QtdLikes = r.Reacoes.Count(reacao => reacao.Like == true),
+                QtdDislikes = r.Reacoes.Count(reacao => reacao.Dislike == true),
+                QtdComentarios = r.Comentarios.Count
+            });
+
+        if(filtro.IdUsuario > 0)
+            query = query.Where(r => r.Usuario.Id == filtro.IdUsuario);
+
+        return query.OrderByDescending(r => r.CreatedAt).ToList();
     }
 }

@@ -23,9 +23,10 @@ namespace FaOuHaterApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ObterReviews()
+        [AllowAnonymous]
+        public async Task<IActionResult> ObterReviews([FromQuery] ObterReviewsRequest request)
         {
-            return ActionResult(await _mediator.Send(new ObterReviewsRequest()));
+            return ActionResult(await _mediator.Send(request));
         }
 
         [HttpPost]

@@ -9,8 +9,8 @@ public partial class Review : EntidadeBase
     public string Review1 { get; set; } = null!;
     public int? Like { get; set; }
     public int? Dislike { get; set; }
-    public int? UsuarioId { get; set; }
-    public virtual Usuario? Usuario { get; set; }
+    public int UsuarioId { get; set; }
+    public virtual Usuario Usuario { get; set; } = null!;
     public virtual ICollection<Reacao> Reacoes { get; set; } = new List<Reacao>();
     public ICollection<Comentario> Comentarios { get; set; } = new List<Comentario>();
 }

@@ -12,12 +12,12 @@ namespace FaOuHaterApi.Controllers.Core
             return statusCode switch
             {
                 EnumHttpStatusCode.Created or
-                EnumHttpStatusCode.Unauthorized or
                 EnumHttpStatusCode.InternalServerError => StatusCode((int)statusCode),
                 EnumHttpStatusCode.Ok or
                 EnumHttpStatusCode.NotFound or
                 EnumHttpStatusCode.BadRequest or
                 EnumHttpStatusCode.InvalidInput => StatusCode((int)statusCode, httpResult),
+                EnumHttpStatusCode.Unauthorized => new UnauthorizedObjectResult(httpResult),
                 _ => StatusCode(StatusCodes.Status500InternalServerError, "Código de status desconhecido"),
             };
         }
