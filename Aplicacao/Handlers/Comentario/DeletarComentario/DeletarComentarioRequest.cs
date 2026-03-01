@@ -1,10 +1,9 @@
 ﻿using Dominio.Interfaces.Base;
 using MediatR;
 
-namespace Aplicacao.Handlers.Comentario.DeletarComentario
+namespace Aplicacao.Handlers.Comentario.DeletarComentario;
+
+public class DeletarComentarioRequest : IRequest<IHttpResult>
 {
-    public class DeletarComentarioRequest : IRequest<IHttpResult>
-    {
-        public int IdComentario { get; set; }
-    }
+    public int IdComentario { get; set; }
 }

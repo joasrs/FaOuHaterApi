@@ -6,36 +6,32 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FaOuHaterApi.Controllers
+namespace FaOuHaterApi.Controllers;
+
+[Authorize]
+[Route("api/[controller]")]
+[ApiController]
+public class ComentarioController : RestController
 {
-    [Authorize]
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ComentarioController : RestController
+    public ComentarioController(IMediator mediator) : base(mediator)
     {
-        private readonly IMediator _mediator;
+    }
 
-        public ComentarioController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+    [HttpGet]
+    public async Task<IActionResult> ObterComentarios([FromQuery] ObterComentariosRequest request)
+    {
+        return ActionResult(await Mediator.Send(request));
+    }
 
-        [HttpGet]
-        public async Task<IActionResult> ObterComentarios([FromQuery] ObterComentariosRequest request)
-        {
-            return ActionResult(await _mediator.Send(request));
-        }
+    [HttpPost]
+    public async Task<IActionResult> AdicionarComentario([FromBody] AdicionarComentarioRequest request)
+    {
+        return ActionResult(await Mediator.Send(request));
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> AdicionarComentario([FromBody] AdicionarComentarioRequest request)
-        {
-            return ActionResult(await _mediator.Send(request));
-        }
-
-        [HttpDelete("{idComentario}")]
-        public async Task<IActionResult> DeleterComentario([FromRoute] DeletarComentarioRequest request)
-        {
-            return ActionResult(await _mediator.Send(request));
-        }
+    [HttpDelete("{idComentario}")]
+    public async Task<IActionResult> DeleterComentario([FromRoute] DeletarComentarioRequest request)
+    {
+        return ActionResult(await Mediator.Send(request));
     }
 }
