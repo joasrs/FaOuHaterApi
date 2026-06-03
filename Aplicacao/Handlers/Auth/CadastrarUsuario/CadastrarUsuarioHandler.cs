@@ -4,46 +4,45 @@ using Dominio.Interfaces.Base;
 using Infra.Http;
 using MediatR;
 
-namespace Aplicacao.Handlers.Auth.CadastrarUsuario
+namespace Aplicacao.Handlers.Auth.CadastrarUsuario;
+
+public class CadastrarUsuarioHandler : IRequestHandler<CadastrarUsuarioRequest, IHttpDataResult<AuthResponse>>
 {
-    public class CadastrarUsuarioHandler : IRequestHandler<CadastrarUsuarioRequest, IHttpDataResult<AuthResponse>>
+    private readonly IAuthService _authService;
+    private readonly IUsuarioRepositorio _usuarioRepositorio;
+
+    public CadastrarUsuarioHandler(IAuthService authService, IUsuarioRepositorio usuarioRepositorio)
     {
-        private readonly IAuthService _authService;
-        private readonly IUsuarioRepositorio _usuarioRepositorio;
+        _authService = authService;
+        _usuarioRepositorio = usuarioRepositorio;
+    }
 
-        public CadastrarUsuarioHandler(IAuthService authService, IUsuarioRepositorio usuarioRepositorio)
+    public Task<IHttpDataResult<AuthResponse>> Handle(CadastrarUsuarioRequest request, CancellationToken cancellationToken)
+    {
+        try
         {
-            _authService = authService;
-            _usuarioRepositorio = usuarioRepositorio;
+            if (string.IsNullOrEmpty(request.Nome) || string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Login) || string.IsNullOrEmpty(request.Senha))
+                return Task.FromResult(HttpDataResult<AuthResponse>.InvalidInput("Todos os campos são obrigatórios."));
+
+            if (_usuarioRepositorio.VerificarUsuarioExiste(request.Login, request.Email))
+                return Task.FromResult(HttpDataResult<AuthResponse>.BadRequest("Usuário ou e-mail já cadastrado."));
+
+            var usuario = new Usuario
+            {
+                Nome = request.Nome,
+                Email = request.Email,
+                Login = request.Login,
+                Senha = _authService.Hash(request.Senha)
+            };
+
+            _usuarioRepositorio.Add(usuario);
+            _usuarioRepositorio.SalvarAlteracaoes();
+
+            return Task.FromResult(HttpDataResult<AuthResponse>.Ok(new AuthResponse(_authService.GerarToken(usuario))));
         }
-
-        public Task<IHttpDataResult<AuthResponse>> Handle(CadastrarUsuarioRequest request, CancellationToken cancellationToken)
+        catch (Exception ex)
         {
-            try
-            {
-                if (string.IsNullOrEmpty(request.Nome) || string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Login) || string.IsNullOrEmpty(request.Senha))
-                    return Task.FromResult(HttpDataResult<AuthResponse>.InvalidInput("Todos os campos são obrigatórios."));
-
-                if (_usuarioRepositorio.VerificarUsuarioExiste(request.Login, request.Email))
-                    return Task.FromResult(HttpDataResult<AuthResponse>.BadRequest("Usuário ou e-mail já cadastrado."));
-
-                var usuario = new Usuario
-                {
-                    Nome = request.Nome,
-                    Email = request.Email,
-                    Login = request.Login,
-                    Senha = _authService.Hash(request.Senha)
-                };
-
-                _usuarioRepositorio.Add(usuario);
-                _usuarioRepositorio.SalvarAlteracaoes();
-
-                return Task.FromResult(HttpDataResult<AuthResponse>.Ok(new AuthResponse(_authService.GerarToken(usuario))));
-            }
-            catch (Exception ex)
-            {
-                return Task.FromResult(HttpDataResult<AuthResponse>.InternalServerError(ex));
-            }
+            return Task.FromResult(HttpDataResult<AuthResponse>.InternalServerError(ex));
         }
     }
 }

@@ -6,6 +6,6 @@ namespace Dominio.Interfaces
 {
     public interface IReviewRepositorio : IRepositorioBase<Review>
     {
-        IEnumerable<ReviewRespostaDto> ObterReviews(int idUsuario);
+        IEnumerable<ReviewRespostaDto> ObterReviews(ObterReviewsFiltroDto filtro);
     }
 }

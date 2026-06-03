@@ -3,17 +3,17 @@ using Dominio.Entidades;
 using Dominio.Interfaces;
 using Microsoft.AspNetCore.Http;
 
-namespace Infra.Context
+namespace Infra.Context;
+
+public class UsuarioContext : IUsuarioContext
 {
-    public class UsuarioContext : IUsuarioContext
+    private readonly Usuario? _usuarioLogado;
+
+    public Usuario? Usuario { get => _usuarioLogado; }
+
+    public UsuarioContext(IUsuarioRepositorio usuarioRepositorio, IHttpContextAccessor httpContextAccessor)
     {
-        private readonly Usuario _usuarioLogado;
-
-        public Usuario Usuario { get => _usuarioLogado; }
-
-        public UsuarioContext(IUsuarioRepositorio usuarioRepositorio, IHttpContextAccessor httpContextAccessor)
-        {
-            _usuarioLogado = usuarioRepositorio.Obter(int.Parse(httpContextAccessor.HttpContext.User.Identity!.Name!))!;
-        }
+        var user = httpContextAccessor?.HttpContext?.User;
+        _usuarioLogado = (!user?.Identity?.IsAuthenticated ?? false) ? null : usuarioRepositorio.Obter(int.Parse(user!.Identity!.Name!))!;
     }
 }

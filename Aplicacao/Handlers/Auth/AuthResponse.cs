@@ -1,12 +1,11 @@
-﻿namespace Aplicacao.Handlers.Auth
-{
-    public class AuthResponse
-    {
-        public string? Token { get; set; }
+﻿namespace Aplicacao.Handlers.Auth;
 
-        public AuthResponse(string token)
-        {
-            Token = token;
-        }
+public class AuthResponse
+{
+    public string? Token { get; set; }
+
+    public AuthResponse(string token)
+    {
+        Token = token;
     }
 }

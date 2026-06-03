@@ -1,4 +1,5 @@
 using Aplicacao.Handlers.Auth.CadastrarUsuario;
+using Dominio.Dtos.Config;
 using Infra.Config;
 using Infra.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,7 +17,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DbFaOuHaterContext>( options =>
-    options.UseNpgsql( builder.Configuration.GetConnectionString( "DefaultConnection" ) ) );
+    options
+    .UseLazyLoadingProxies()
+    .UseNpgsql( builder.Configuration.GetConnectionString( "DefaultConnection" ) ) );
 
 builder.Services.AddCors( options =>
 {
@@ -28,6 +31,16 @@ builder.Services.AddCors( options =>
               .AllowAnyHeader(); // Permite qualquer cabeçalho
     } );
 } );
+
+builder.Services.Configure<ApiConfig>(
+    builder.Configuration.GetSection("Http"));
+
+builder.Services.AddHttpClient("last.fm", client =>
+{
+    var baseUrl = builder?.Configuration?.Get<HttpOptions>()?.Http.LastFm.BaseUrl;
+    client.BaseAddress = new Uri(baseUrl ?? string.Empty);
+});
+
 
 builder.Services.AddInjecaoDependecia();
 

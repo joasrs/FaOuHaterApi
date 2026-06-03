@@ -4,6 +4,6 @@ namespace Dominio.Interfaces
 {
     public interface IUsuarioContext
     {
-        Usuario Usuario { get; }
+        Usuario? Usuario { get; }
     }
 }

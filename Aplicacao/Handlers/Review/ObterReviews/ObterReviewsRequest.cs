@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Aplicacao.Handlers.Review.ObterReviews
 {
-    public class ObterReviewsRequest : IRequest<IHttpDataResult<IEnumerable<ReviewRespostaDto>>>
+    public class ObterReviewsRequest : ObterReviewsFiltroDto, IRequest<IHttpDataResult<IEnumerable<ReviewRespostaDto>>>
     {
     }
 }
