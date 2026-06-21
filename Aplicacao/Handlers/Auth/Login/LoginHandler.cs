@@ -1,5 +1,4 @@
-﻿using Dominio.Entidades;
-using Dominio.Enum;
+﻿using Dominio.Enum;
 using Dominio.Interfaces;
 using Dominio.Interfaces.Base;
 using Infra.Http;
