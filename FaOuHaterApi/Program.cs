@@ -22,16 +22,17 @@ builder.Services.AddDbContext<DbFaOuHaterContext>( options =>
     .UseLazyLoadingProxies()
     .UseNpgsql( builder.Configuration.GetConnectionString( "DefaultConnection" ) ) );
 
-builder.Services.AddCors( options =>
+builder.Services.AddCors(options =>
 {
-    options.AddPolicy( "OrigensPermitidas", policy =>
+    options.AddPolicy("OrigensPermitidas", policy =>
     {
-        policy.WithOrigins( "http://localhost:3000" )
-               //AllowAnyOrigin()  // Permite qualquer origem
+        policy.WithOrigins("http://localhost:3000")
+              //.AllowAnyOrigin()  // Permite qualquer origem
               .AllowAnyMethod()  // Permite qualquer método HTTP (GET, POST, etc.)
-              .AllowAnyHeader(); // Permite qualquer cabeçalho
-    } );
-} );
+              .AllowAnyHeader()  // Permite qualquer cabeçalho
+              .AllowCredentials();
+    });
+});
 
 builder.Services.Configure<HttpOptions>(
     builder.Configuration.GetSection("Http"));
@@ -68,9 +69,6 @@ builder.Services.AddMediatR(cfg =>
 
 var app = builder.Build();
 
-app.UseAuthentication();
-app.UseAuthorization();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -78,9 +76,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHttpsRedirection();
+
 app.UseCors("OrigensPermitidas");
 
-app.UseHttpsRedirection();
+app.UseAuthentication();
 
 app.UseAuthorization();
 
