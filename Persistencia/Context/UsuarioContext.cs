@@ -13,6 +13,6 @@ public class UsuarioContext : IUsuarioContext
     public UsuarioContext(IUsuarioRepositorio usuarioRepositorio, IHttpContextAccessor httpContextAccessor)
     {
         var user = httpContextAccessor?.HttpContext?.User;
-        _usuarioLogado = (!user?.Identity?.IsAuthenticated ?? false) ? null : usuarioRepositorio.Obter(int.Parse(user!.Identity!.Name!))!;
+        _usuarioLogado = (!user?.Identity?.IsAuthenticated ?? false) ? null : usuarioRepositorio.GetById(int.Parse(user!.Identity!.Name!))!;
     }
 }

@@ -21,13 +21,13 @@ namespace Aplicacao.Handlers.Review.DeletarReview
                 if(request.IdReview <= 0)
                     return Task.FromResult(HttpResult.InvalidInput("Necessário informar o Id da review"));
 
-                var review = _reviewRepositorio.Obter(request.IdReview);
+                var review = _reviewRepositorio.GetById(request.IdReview);
 
                 if (review == null)
                     return Task.FromResult(HttpResult.NotFound("Não foi encontrado nenhuma review com o Id informado"));
 
                 _reviewRepositorio.Delete(review);
-                _reviewRepositorio.SalvarAlteracaoes();
+                _reviewRepositorio.SaveChanges();
 
                 return Task.FromResult(HttpResult.Ok());
             }

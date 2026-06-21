@@ -1,8 +1,9 @@
-﻿using FluentValidation;
+﻿using Aplicacao.Handlers.Review.AdicionarReview;
+using FluentValidation;
 
 namespace Aplicacao.Validators.Review;
 
-public class AdicionarReviewValidator : AbstractValidator<Dominio.Entidades.Review>
+public class AdicionarReviewValidator : AbstractValidator<AdicionarReviewRequest>
 {
     public AdicionarReviewValidator()
     {
@@ -12,7 +13,7 @@ public class AdicionarReviewValidator : AbstractValidator<Dominio.Entidades.Revi
         RuleFor(x => x.Musica)
             .NotEmpty().WithMessage("A música obrigatória.")
             .MaximumLength(255).WithMessage("A música deve ter no máximo 255 caracteres.");
-        RuleFor(x => x.Review1)
+        RuleFor(x => x.Descricao)
              .NotEmpty().WithMessage("A descrição da review é obrigatória.")
             .MaximumLength(500).WithMessage("A descrição da review deve ter no máximo 500 caracteres.");
     }

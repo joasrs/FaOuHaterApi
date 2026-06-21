@@ -5,6 +5,6 @@ namespace Dominio.Interfaces.ExternalServices;
 
 public interface ITrackService
 {
-    Task<InfoTrackDto?> ObterTrackAsync(string? idTrack, string? track, string? artist, CancellationToken cancellationToken);
+    Task<InfoTrackDto?> ObterTrackAsync(Guid? idTrack, string? track, string? artist, CancellationToken cancellationToken);
     Task<IEnumerable<SearchTrackDto>> ObterTracksAsync(string track, CancellationToken cancellationToken);
 }

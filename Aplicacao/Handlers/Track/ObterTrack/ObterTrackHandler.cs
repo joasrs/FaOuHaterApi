@@ -11,7 +11,7 @@ public class ObterTrackHandler(ITrackService trackService) : IRequestHandler<Obt
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(request.IdTrack) && (string.IsNullOrWhiteSpace(request.Track) || string.IsNullOrWhiteSpace(request.Artist)))
+            if (request.IdTrack == null && (string.IsNullOrWhiteSpace(request.Track) || string.IsNullOrWhiteSpace(request.Artist)))
                 return await Task.FromResult(HttpDataResult<TrackResponse>.BadRequest("O nome da track e o nome do artista não podem ser vazios."));
 
             var track = await trackService.ObterTrackAsync(request.IdTrack, request.Track, request.Artist, cancellationToken);

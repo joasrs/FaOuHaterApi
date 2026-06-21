@@ -12,7 +12,7 @@ namespace Infra.ExternalServices.Services;
 
 public class TrackService(ILogger<TrackService> logger, IHttpClientFactory httpClientFactory, IOptions<HttpOptions> httpOptions) : ITrackService
 {
-    public async Task<InfoTrackDto?> ObterTrackAsync(string? idTrack, string? track, string? artist, CancellationToken cancellationToken)
+    public async Task<InfoTrackDto?> ObterTrackAsync(Guid? idTrack, string? track, string? artist, CancellationToken cancellationToken)
     {
         var trackResult = await RequestExternal<InfoTrackResultDto>(
             cancellationToken,
@@ -37,7 +37,7 @@ public class TrackService(ILogger<TrackService> logger, IHttpClientFactory httpC
     public async Task<T?> RequestExternal<T>(
         CancellationToken cancellationToken,
         string method, 
-        string? idTrack = null,
+        Guid? idTrack = null,
         string? track = null, 
         string? artist = null)
     {
@@ -50,7 +50,7 @@ public class TrackService(ILogger<TrackService> logger, IHttpClientFactory httpC
                 ["method"] = method,
                 ["format"] = "json",
                 ["limit"] = "5",
-                ["mbid"] = idTrack ?? string.Empty,
+                ["mbid"] = idTrack?.ToString() ?? string.Empty,
                 ["track"] = track ?? string.Empty,
                 ["artist"] = artist ?? string.Empty,
                 ["api_key"] = httpOptions?.Value?.LastFm?.Key ?? string.Empty,

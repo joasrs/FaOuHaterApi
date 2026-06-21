@@ -25,7 +25,7 @@ public class AdicionarComentarioHandler : IRequestHandler<AdicionarComentarioReq
             if(string.IsNullOrWhiteSpace(request.Comentario))
                 return Task.FromResult(HttpResult.InvalidInput("Comentário não pode ser vazio."));
 
-            var review = _reviewRepositorio.Obter(request.IdReview);
+            var review = _reviewRepositorio.GetById(request.IdReview);
 
             if(review == null)
                 return Task.FromResult(HttpResult.NotFound("Review não encontrada."));
@@ -39,7 +39,7 @@ public class AdicionarComentarioHandler : IRequestHandler<AdicionarComentarioReq
                 UsuarioId = _usuarioContext.Usuario!.Id
             });
 
-            _comentarioRepositorio.SalvarAlteracaoes();
+            _comentarioRepositorio.SaveChanges();
 
             return Task.FromResult(HttpResult.Created());
         }

@@ -8,6 +8,6 @@ namespace Aplicacao.Handlers.Review.AdicionarReview
         public Guid? IdTrack { get; set; }
         public string Artista { get; set; } = string.Empty;
         public string Musica { get; set; } = string.Empty;
-        public string Review { get; set; } = string.Empty;
+        public string Descricao { get; set; } = string.Empty;
     }
 }

@@ -36,7 +36,7 @@ public class CadastrarUsuarioHandler : IRequestHandler<CadastrarUsuarioRequest, 
             };
 
             _usuarioRepositorio.Add(usuario);
-            _usuarioRepositorio.SalvarAlteracaoes();
+            _usuarioRepositorio.SaveChanges();
 
             return Task.FromResult(HttpDataResult<AuthResponse>.Ok(new AuthResponse(_authService.GerarToken(usuario))));
         }

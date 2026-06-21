@@ -20,9 +20,10 @@ public class ReviewRepositorio : RepositorioBase<Review>, IReviewRepositorio
                 Id = r.Id,
                 Artista = r.Artista,
                 Musica = r.Musica,
-                Review1 = r.Review1,
+                Descricao = r.Descricao,
                 Like = r.Like,
                 Dislike = r.Dislike,
+                ImagemUrl = r.ImagemUrl,
                 CreatedAt = r.CreatedAt,
 
                 Usuario = new ReviewRespostaUsuarioDto

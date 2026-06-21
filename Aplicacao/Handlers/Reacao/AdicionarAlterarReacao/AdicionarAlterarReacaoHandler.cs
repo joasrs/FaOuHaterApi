@@ -47,7 +47,7 @@ public class AdicionarAlterarReacaoHandler : IRequestHandler<AdicionarAlterarRea
                 _reacaoRepositorio.Add(reacao);
             }
 
-            _reacaoRepositorio.SalvarAlteracaoes();
+            _reacaoRepositorio.SaveChanges();
 
             return Task.FromResult(HttpResult.Ok());
         }

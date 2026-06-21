@@ -18,7 +18,8 @@ public class ReviewMap : IEntityTypeConfiguration<Review>
         builder.Property(e => e.Dislike).HasColumnName("dislike");
         builder.Property(e => e.Like).HasColumnName("like");
         builder.Property(e => e.Musica).HasMaxLength(255).HasColumnName("musica");
-        builder.Property(e => e.Review1).HasColumnName("review");
+        builder.Property(e => e.Descricao).HasColumnName("review");
+        builder.Property(e => e.ImagemUrl).HasColumnName("imagemUrl");
         builder.Property(e => e.UpdatedAt).HasColumnName("updatedAt").HasColumnType("timestamptz").IsRequired(false);
 
         builder.HasOne(d => d.Usuario).WithMany(p => p.Reviews).HasForeignKey(d => d.UsuarioId)

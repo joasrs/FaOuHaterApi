@@ -21,13 +21,13 @@ public class DeletarComentarioHandler : IRequestHandler<DeletarComentarioRequest
             if (request.IdComentario <= 0)
                 return Task.FromResult(HttpResult.InvalidInput("Necessário informar o Id do comentário"));
 
-            var review = _comentarioRepositorio.Obter(request.IdComentario);
+            var review = _comentarioRepositorio.GetById(request.IdComentario);
 
             if (review == null)
                 return Task.FromResult(HttpResult.NotFound("Não foi encontrado nenhum comentário com o Id informado"));
 
             _comentarioRepositorio.Delete(review);
-            _comentarioRepositorio.SalvarAlteracaoes();
+            _comentarioRepositorio.SaveChanges();
 
             return Task.FromResult(HttpResult.Ok());
         }

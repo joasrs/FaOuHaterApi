@@ -2,11 +2,11 @@
 
 public interface IRepositorioBase<TEntidade>
 {
-    TEntidade? Obter(int id);
+    TEntidade? GetById(int id);
     IEnumerable<TEntidade> ObterTodos();
     bool Add(TEntidade entity);
     bool Update(TEntidade entity);
     bool Delete(TEntidade entity);
-    bool SalvarAlteracaoes();
+    bool SaveChanges();
     bool Existe(int id);
 }
