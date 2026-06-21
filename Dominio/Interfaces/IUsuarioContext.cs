@@ -1,9 +1,8 @@
 ﻿using Dominio.Entidades;
 
-namespace Dominio.Interfaces
+namespace Dominio.Interfaces;
+
+public interface IUsuarioContext
 {
-    public interface IUsuarioContext
-    {
-        Usuario? Usuario { get; }
-    }
+    Usuario? Usuario { get; }
 }

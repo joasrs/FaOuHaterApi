@@ -12,34 +12,30 @@ namespace FaOuHaterApi.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
-public class ReviewController : RestController
+public class ReviewController(IMediator mediator) : RestController
 {
-    public ReviewController(IMediator mediator) : base(mediator)
-    {
-    }
-
     [HttpGet]
     [AllowAnonymous]
     public async Task<IActionResult> ObterReviews([FromQuery] ObterReviewsRequest request)
     {
-        return ActionResult(await Mediator.Send(request));
+        return ActionResult(await mediator.Send(request));
     }
 
     [HttpPost]
     public async Task<IActionResult> AdicionarReview([FromBody] AdicionarReviewRequest request)
     {
-        return ActionResult(await Mediator.Send(request));
+        return ActionResult(await mediator.Send(request));
     }
 
     [HttpDelete("{idReview}")]
     public async Task<IActionResult> DeletarReview([FromRoute] DeletarReviewRequest request)
     {
-        return ActionResult(await Mediator.Send(request));
+        return ActionResult(await mediator.Send(request));
     }
 
     [HttpPut("{idReview}/reagir/{tipoReacao}")]
     public async Task<IActionResult> Put([FromRoute] AdicionarAlterarReacaoRequest request)
     {
-        return ActionResult(await Mediator.Send(request));
+        return ActionResult(await mediator.Send(request));
     }
 }

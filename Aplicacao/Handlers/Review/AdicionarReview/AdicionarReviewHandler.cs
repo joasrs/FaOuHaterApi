@@ -4,45 +4,36 @@ using Dominio.Interfaces.Base;
 using Infra.Http;
 using MediatR;
 
-namespace Aplicacao.Handlers.Review.AdicionarReview
+namespace Aplicacao.Handlers.Review.AdicionarReview;
+
+public class AdicionarReviewHandler(IUsuarioContext usuarioContext, IReviewRepositorio reviewRepositorio) : IRequestHandler<AdicionarReviewRequest, IHttpResult>
 {
-    public class AdicionarReviewHandler : IRequestHandler<AdicionarReviewRequest, IHttpResult>
+    public Task<IHttpResult> Handle(AdicionarReviewRequest request, CancellationToken cancellationToken)
     {
-        public readonly IUsuarioContext _usuarioContext;
-        public readonly IReviewRepositorio _reviewRepositorio;
-
-        public AdicionarReviewHandler(IUsuarioContext usuarioContext, IReviewRepositorio reviewRepositorio)
+        try
         {
-            _usuarioContext = usuarioContext;
-            _reviewRepositorio = reviewRepositorio;
+            var review = new Dominio.Entidades.Review
+            {
+                IdTrack = request.IdTrack,
+                Artista = request.Artista,
+                Musica = request.Musica,
+                Review1 = request.Review,
+                UsuarioId = usuarioContext.Usuario!.Id
+            };
+
+            var resultadoValidacao = new AdicionarReviewValidator().Validate(review);
+
+            if (!resultadoValidacao.IsValid)
+                return Task.FromResult(HttpResult.InvalidInput(resultadoValidacao.Errors.Select(e => e.ErrorMessage)));
+
+            reviewRepositorio.Add(review);
+            reviewRepositorio.SalvarAlteracaoes();
+
+            return Task.FromResult(HttpResult.Created());
         }
-
-        public Task<IHttpResult> Handle(AdicionarReviewRequest request, CancellationToken cancellationToken)
+        catch (Exception ex)
         {
-            try
-            {
-                var review = new Dominio.Entidades.Review
-                {
-                    Artista = request.Artista,
-                    Musica = request.Musica,
-                    Review1 = request.Review,
-                    UsuarioId = _usuarioContext.Usuario.Id
-                };
-
-                var resultadoValidacao = new AdicionarReviewValidator().Validate(review);
-
-                if (!resultadoValidacao.IsValid)
-                    return Task.FromResult(HttpResult.InvalidInput(resultadoValidacao.Errors.Select(e => e.ErrorMessage)));
-
-                _reviewRepositorio.Add(review);
-                _reviewRepositorio.SalvarAlteracaoes();
-
-                return Task.FromResult(HttpResult.Created());
-            }
-            catch (Exception ex)
-            {
-                return Task.FromResult(HttpResult.InternalServerError(ex));
-            }
+            return Task.FromResult(HttpResult.InternalServerError(ex));
         }
     }
 }

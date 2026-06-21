@@ -1,5 +1,6 @@
-﻿using Domain.Interfaces;
+﻿using Dominio.Entidades;
 using Dominio.Enum;
+using Dominio.Interfaces;
 using Dominio.Interfaces.Base;
 using Infra.Http;
 using MediatR;
@@ -33,7 +34,7 @@ public class LoginHandler : IRequestHandler<LoginRequest, IHttpDataResult<AuthRe
         }
         catch (Exception ex)
         {
-            throw new Exception(ex.Message);
+            return Task.FromResult(HttpDataResult<AuthResponse>.InternalServerError(ex));
         }
     } 
 }

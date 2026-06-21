@@ -4,6 +4,7 @@ using Infra.Config;
 using Infra.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -32,15 +33,14 @@ builder.Services.AddCors( options =>
     } );
 } );
 
-builder.Services.Configure<ApiConfig>(
+builder.Services.Configure<HttpOptions>(
     builder.Configuration.GetSection("Http"));
 
-builder.Services.AddHttpClient("last.fm", client =>
+builder.Services.AddHttpClient("last.fm", (sp, client) =>
 {
-    var baseUrl = builder?.Configuration?.Get<HttpOptions>()?.Http.LastFm.BaseUrl;
-    client.BaseAddress = new Uri(baseUrl ?? string.Empty);
+    var option = sp.GetRequiredService<IOptions<HttpOptions>>();
+    client.BaseAddress = new Uri(option?.Value?.LastFm?.BaseUrl ?? string.Empty);
 });
-
 
 builder.Services.AddInjecaoDependecia();
 

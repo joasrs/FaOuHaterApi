@@ -11,27 +11,23 @@ namespace FaOuHaterApi.Controllers;
 [Authorize]
 [Route("api/[controller]")]
 [ApiController]
-public class ComentarioController : RestController
+public class ComentarioController(IMediator mediator) : RestController
 {
-    public ComentarioController(IMediator mediator) : base(mediator)
-    {
-    }
-
     [HttpGet]
     public async Task<IActionResult> ObterComentarios([FromQuery] ObterComentariosRequest request)
     {
-        return ActionResult(await Mediator.Send(request));
+        return ActionResult(await mediator.Send(request));
     }
 
     [HttpPost]
     public async Task<IActionResult> AdicionarComentario([FromBody] AdicionarComentarioRequest request)
     {
-        return ActionResult(await Mediator.Send(request));
+        return ActionResult(await mediator.Send(request));
     }
 
     [HttpDelete("{idComentario}")]
-    public async Task<IActionResult> DeleterComentario([FromRoute] DeletarComentarioRequest request)
+    public async Task<IActionResult> DeletarComentario([FromRoute] DeletarComentarioRequest request)
     {
-        return ActionResult(await Mediator.Send(request));
+        return ActionResult(await mediator.Send(request));
     }
 }

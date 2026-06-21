@@ -1,10 +1,9 @@
-﻿using Domain.Interfaces.Base;
+﻿using Dominio.Interfaces.Base;
 using Dominio.Entidades;
 
-namespace Dominio.Interfaces
+namespace Dominio.Interfaces;
+
+public interface IReacaoRepositorio : IRepositorioBase<Reacao>
 {
-    public interface IReacaoRepositorio : IRepositorioBase<Reacao>
-    {
-        Reacao? ObterReacaoPorUsuarioReview(int idUsuario, int idReview);
-    }
+    Reacao? ObterReacaoPorUsuarioReview(int idUsuario, int idReview);
 }

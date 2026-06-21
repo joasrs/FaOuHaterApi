@@ -1,14 +1,19 @@
-﻿namespace Infra.ExternalServices.Models.Track;
+﻿namespace Dominio.Dtos.ExternalServices.Track;
 
-public class InfoTrackDto : BaseTrackDto
+public class InfoTrackResultDto
 {
-    public string? Duration { get; set; }
-    public StreamableDto? Streamable { get; set; }
-    public string? Playcount { get; set; }
-    public ArtistDto? Artist { get; set; }
-    public AlbumDto? Album { get; set; }
-    public TopTagsDto? TopTags { get; set; }
-    public WikiDto? Wiki { get; set; }
+    public InfoTrackDto? Track { get; set; }
+
+    public class InfoTrackDto : BaseTrackDto
+    {
+        public string? Duration { get; set; }
+        public StreamableDto? Streamable { get; set; }
+        public string? Playcount { get; set; }
+        public ArtistDto? Artist { get; set; }
+        public AlbumDto? Album { get; set; }
+        public TopTagsDto? TopTags { get; set; }
+        public WikiDto? Wiki { get; set; }
+    }
 
     public class StreamableDto
     {

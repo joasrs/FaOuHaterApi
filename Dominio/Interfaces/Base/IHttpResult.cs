@@ -1,10 +1,7 @@
-﻿using Dominio.Enum;
+﻿namespace Dominio.Interfaces.Base;
 
-namespace Dominio.Interfaces.Base
+public interface IHttpResult
 {
-    public interface IHttpResult
-    {
-        public IEnumerable<string> Messages { get; set; }
-        public int GetStatusCode();
-    }
+    public IEnumerable<string> Messages { get; set; }
+    public int GetStatusCode();
 }

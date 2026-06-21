@@ -1,10 +1,9 @@
-﻿using Domain.Interfaces.Base;
+﻿using Dominio.Interfaces.Base;
 using Dominio.Entidades;
 
-namespace Dominio.Interfaces
+namespace Dominio.Interfaces;
+
+public interface IComentarioRepositorio : IRepositorioBase<Comentario>
 {
-    public interface IComentarioRepositorio : IRepositorioBase<Comentario>
-    {
-        IEnumerable<Comentario> ObterComentariosPorReview(int idReview);
-    }
+    IEnumerable<Comentario> ObterComentariosPorReview(int idReview);
 }

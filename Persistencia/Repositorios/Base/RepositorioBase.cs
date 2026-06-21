@@ -1,4 +1,4 @@
-﻿using Domain.Interfaces.Base;
+﻿using Dominio.Interfaces.Base;
 using Dominio.Entidades.Base;
 using Infra.Context;
 using Microsoft.EntityFrameworkCore;

@@ -4,6 +4,7 @@ namespace Dominio.Entidades;
 
 public partial class Review : EntidadeBase
 {
+    public Guid? IdTrack { get; set; }
     public string Artista { get; set; } = null!;
     public string Musica { get; set; } = null!;
     public string Review1 { get; set; } = null!;

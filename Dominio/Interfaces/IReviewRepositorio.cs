@@ -1,11 +1,10 @@
-﻿using Domain.Interfaces.Base;
+﻿using Dominio.Interfaces.Base;
 using Dominio.Dtos.Review;
 using Dominio.Entidades;
 
-namespace Dominio.Interfaces
+namespace Dominio.Interfaces;
+
+public interface IReviewRepositorio : IRepositorioBase<Review>
 {
-    public interface IReviewRepositorio : IRepositorioBase<Review>
-    {
-        IEnumerable<ReviewRespostaDto> ObterReviews(ObterReviewsFiltroDto filtro);
-    }
+    IEnumerable<ReviewRespostaDto> ObterReviews(ObterReviewsFiltroDto filtro);
 }

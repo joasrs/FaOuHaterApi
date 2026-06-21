@@ -1,6 +1,5 @@
-﻿using Domain.Interfaces;
+﻿using Dominio.Interfaces;
 using Dominio.Entidades;
-using Dominio.Interfaces;
 using Microsoft.AspNetCore.Http;
 
 namespace Infra.Context;

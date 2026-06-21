@@ -1,11 +1,10 @@
-﻿using Domain.Interfaces.Base;
+﻿using Dominio.Interfaces.Base;
 using Dominio.Entidades;
 
-namespace Domain.Interfaces
+namespace Dominio.Interfaces;
+
+public interface IUsuarioRepositorio : IRepositorioBase<Usuario>
 {
-    public interface IUsuarioRepositorio : IRepositorioBase<Usuario>
-    {
-        bool VerificarUsuarioExiste(string login, string email);
-        Usuario? ObterPorLogin(string login);
-    }
+    bool VerificarUsuarioExiste(string login, string email);
+    Usuario? ObterPorLogin(string login);
 }

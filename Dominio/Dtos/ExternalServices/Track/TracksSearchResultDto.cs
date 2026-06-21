@@ -1,4 +1,4 @@
-﻿namespace Infra.ExternalServices.Models.Track;
+﻿namespace Dominio.Dtos.ExternalServices.Track;
 
 public class TracksSearchResultDto
 {

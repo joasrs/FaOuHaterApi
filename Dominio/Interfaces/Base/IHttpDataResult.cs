@@ -1,7 +1,6 @@
-﻿namespace Dominio.Interfaces.Base
+﻿namespace Dominio.Interfaces.Base;
+
+public interface IHttpDataResult<TData> : IHttpResult
 {
-    public interface IHttpDataResult<TData> : IHttpResult
-    {
-        public TData? Data { get; set; }
-    }
+    public TData? Data { get; set; }
 }

@@ -1,37 +1,82 @@
 ﻿using Dominio.Dtos.Config;
-using Infra.ExternalServices.Interfaces;
-using Infra.ExternalServices.Models.Track;
+using Dominio.Dtos.ExternalServices.Track;
+using Dominio.Interfaces.ExternalServices;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
-using static Infra.ExternalServices.Models.Track.TracksSearchResultDto;
+using static Dominio.Dtos.ExternalServices.Track.InfoTrackResultDto;
+using static Dominio.Dtos.ExternalServices.Track.TracksSearchResultDto;
 
 namespace Infra.ExternalServices.Services;
 
-public class TrackService(IHttpClientFactory httpClientFactory, IOptions<ApiConfig> options) : ITrackService
+public class TrackService(ILogger<TrackService> logger, IHttpClientFactory httpClientFactory, IOptions<HttpOptions> httpOptions) : ITrackService
 {
-    public async Task<IEnumerable<SearchTrackDto>> ObterTracksPorNomeAsync(string nomeTrack)
+    public async Task<InfoTrackDto?> ObterTrackAsync(string? idTrack, string? track, string? artist, CancellationToken cancellationToken)
     {
-		try
-		{
-			var client = httpClientFactory.CreateClient("last.fm");
-			var result = await client.GetAsync($"?api_key=???c3&method=track.search&track={nomeTrack}&format=json&limit=5");
+        var trackResult = await RequestExternal<InfoTrackResultDto>(
+            cancellationToken,
+            "track.getInfo",
+            idTrack,
+            track,
+            artist);
 
-			if (result.IsSuccessStatusCode)
-			{
-				var content = await result.Content.ReadAsStringAsync();
-				var tracks = JsonSerializer.Deserialize<TracksSearchResultDto>(content, new JsonSerializerOptions
+        return trackResult?.Track;
+    }
+
+    public async Task<IEnumerable<SearchTrackDto>> ObterTracksAsync(string track, CancellationToken cancellationToken)
+    {
+        var tracksSearchResult = await RequestExternal<TracksSearchResultDto>(
+            cancellationToken, 
+            "track.search", 
+            track: track);
+
+        return tracksSearchResult?.Results?.TrackMatches?.Track ?? [];
+    }
+
+    public async Task<T?> RequestExternal<T>(
+        CancellationToken cancellationToken,
+        string method, 
+        string? idTrack = null,
+        string? track = null, 
+        string? artist = null)
+    {
+        try
+        {
+            var client = httpClientFactory.CreateClient("last.fm");
+
+            var query = new Dictionary<string, string>
+            {
+                ["method"] = method,
+                ["format"] = "json",
+                ["limit"] = "5",
+                ["mbid"] = idTrack ?? string.Empty,
+                ["track"] = track ?? string.Empty,
+                ["artist"] = artist ?? string.Empty,
+                ["api_key"] = httpOptions?.Value?.LastFm?.Key ?? string.Empty,
+            };
+
+            var url = QueryHelpers.AddQueryString("", query);
+            var response = await client.GetAsync(url, cancellationToken);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<T>(content, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
-                });
-				return tracks?.Results?.TrackMatches?.Track ?? [];
-			}
-
-			return [];
+                }) ?? default;
+            }
         }
-		catch (Exception ex)
-		{
+        catch (JsonException ex)
+        {
+            logger.LogError("Erro ocorrido ao desserializar o retorno da requisição externa: {erro}. StackTrace: {stackTrace}", ex.Message, ex.StackTrace);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("Erro ocorrido ao executar requisição externa: {erro}. StackTrace: {stackTrace}", ex.Message, ex.StackTrace);
+        }
 
-			throw ex;
-		}
+        return default;
     }
 }

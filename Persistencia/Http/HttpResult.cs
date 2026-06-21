@@ -24,7 +24,7 @@ public class HttpResult : IHttpResult
     public HttpResult(Exception ex)
     {
         _statusCode = EnumHttpStatusCode.InternalServerError;
-        Messages = new List<string> { "Ocorreu um erro internamente." };
+        Messages = new List<string> { "Ocorreu um erro internamente.", ex.Message };
 
         try
         {

@@ -1,11 +1,10 @@
 ﻿using Dominio.Entidades;
 
-namespace Domain.Interfaces
+namespace Dominio.Interfaces;
+
+public interface IAuthService
 {
-    public interface IAuthService
-    {
-        string GerarToken(Usuario usuario);
-        string Hash(string senha);
-        bool ValidarSenha(string senha, string hash);
-    }
+    string GerarToken(Usuario usuario);
+    string Hash(string senha);
+    bool ValidarSenha(string senha, string hash);
 }

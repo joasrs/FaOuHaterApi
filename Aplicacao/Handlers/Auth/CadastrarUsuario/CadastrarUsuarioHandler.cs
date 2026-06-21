@@ -1,4 +1,4 @@
-﻿using Domain.Interfaces;
+﻿using Dominio.Interfaces;
 using Dominio.Entidades;
 using Dominio.Interfaces.Base;
 using Infra.Http;

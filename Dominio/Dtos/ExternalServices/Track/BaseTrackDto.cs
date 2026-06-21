@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Infra.ExternalServices.Models.Track;
+namespace Dominio.Dtos.ExternalServices.Track;
 
 public class BaseTrackDto
 {
